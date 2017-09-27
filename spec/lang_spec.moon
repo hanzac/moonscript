@@ -1,5 +1,3 @@
-lfs = require "lfs"
-
 import with_dev from require "spec.helpers"
 
 pattern = ...

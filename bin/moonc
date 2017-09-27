@@ -1,7 +1,9 @@
 #!/usr/bin/env lua
 
 local alt_getopt = require "alt_getopt"
-local lfs = require "lfs"
+local cmd = 'dir /b /o /a:-h '
+local sep = '\\'
+local dir = '.'
 
 local opts, ind = alt_getopt.get_opts(arg, "lvhwt:o:pTXb", {
 	print = "p", tree = "T", version = "v", help = "h", lint = "l"
@@ -60,11 +62,18 @@ local parse_file = moonc.parse_file
 local compile_and_write = moonc.compile_and_write
 local path_to_target = moonc.path_to_target
 
+local function lines(str)
+  local t = {}
+  local function helper(line) table.insert(t, line) return "" end
+  helper((str:gsub("(.-)\r?\n", helper)))
+  return t
+end
+
 local function scan_directory(root, collected)
 	root = normalize_dir(root)
 	collected = collected or {}
-
-	for fname in lfs.dir(root) do
+        print(root)
+	for _, fname in pairs(lines(io.popen(cmd..'"'..root..sep..'"'):read '*a')) do
 		if not fname:match("^%.") then
 			local full_path = root..fname
 
@@ -98,18 +107,20 @@ end
 local function get_files(fname, files)
 	files = files or {}
 
-	if lfs.attributes(fname, "mode") == "directory" then
+        print (fname)
+        print (io.open(fname))
+	if io.type(io.open(fname)) then
+		table.insert(files, {
+			fname,
+			path_to_target(fname, opts.t)
+		})
+	else -- "directory"
 		for _, sub_fname in ipairs(scan_directory(fname)) do
 			table.insert(files, {
 				sub_fname,
 				path_to_target(sub_fname, opts.t, fname)
 			})
 		end
-	else
-		table.insert(files, {
-			fname,
-			path_to_target(fname, opts.t)
-		})
 	end
 
 	return files

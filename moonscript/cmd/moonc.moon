@@ -1,7 +1,5 @@
 -- assorted utilities for moonc command line tool
 
-lfs = require "lfs"
-
 import split from require "moonscript.util"
 
 local *
@@ -19,9 +17,9 @@ mkdir = (path) ->
   local accum
   for dir in *chunks
     accum = accum and "#{accum}#{dirsep}#{dir}" or dir
-    lfs.mkdir accum
+    os.execute("mkdir " .. accum)
 
-  lfs.attributes path, "mode"
+  true
 
 -- strips excess / and ensures path ends with /
 normalize_dir = (path) ->

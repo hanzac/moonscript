@@ -1,4 +1,3 @@
-local lfs = require("lfs")
 local split
 split = require("moonscript.util").split
 local dirsep, dirsep_chars, mkdir, normalize_dir, parse_dir, parse_file, convert_path, format_time, gettime, compile_file_text, write_file, compile_and_write, is_abs_path, path_to_target
@@ -14,9 +13,9 @@ mkdir = function(path)
   for _index_0 = 1, #chunks do
     local dir = chunks[_index_0]
     accum = accum and tostring(accum) .. tostring(dirsep) .. tostring(dir) or dir
-    lfs.mkdir(accum)
+    os.execute("mkdir " .. accum)
   end
-  return lfs.attributes(path, "mode")
+  return true
 end
 normalize_dir = function(path)
   return path:match("^(.-)[" .. tostring(dirsep_chars) .. "]*$") .. dirsep

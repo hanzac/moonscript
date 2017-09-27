@@ -190,7 +190,6 @@ do
     end,
     each_update = function(self)
       return coroutine.wrap(function()
-        local lfs = require("lfs")
         local sleep = self:get_sleep_func()
         self:print_start("polling", plural(#self.file_list, "files"))
         local mod_time = { }
