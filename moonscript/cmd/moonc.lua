@@ -73,7 +73,7 @@ compile_file_text = function(text, opts)
   end
   if opts.show_parse_tree then
     local dump = require("moonscript.dump")
-    dump.tree(tree)
+    print(dump.tree(tree))
     return true
   end
   local compile_time

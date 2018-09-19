@@ -106,6 +106,7 @@ local function get_files(fname, files)
 				path_to_target(sub_fname, opts.output_to, fname)
 			})
 		end
+		path_to_target(fname, opts.output_to)
 	end
 
 	return files
